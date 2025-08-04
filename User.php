@@ -30,16 +30,38 @@ class User {
         $sql = "SELECT * FROM utilisateurs WHERE login = '$login' AND password = '$password'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
-            return $result->fetch_assoc();
+            $data = $result->fetch_assoc();
+            $this->sid = $data['id'];
+            $this->login = $data['login'];
+            $this->email = $data['email'];
+            $this->firstname = $data['firstname'];
+            $this->lastname = $data['lastname'];
+            return true;
         }
         else {
-            return null;
+            return false;
+        }
+    }
+    public function disconnect(){
+        $this->sid = null;
+        $this->login = "";
+        $this->email = "";
+        $this->firstname = "";
+        $this->lastname = "";
+    }
+    public function delete(){
+    $sql ="DELETE FROM utilisateurs WHERE id = $this->sid";
+        global $conn;
+        if($conn->query($sql)){
+            $this->disconnect();
+            return true;
+        }
+        else {
+            return false;
         }
     }
 
-
 }
-
 
 
 ?>
