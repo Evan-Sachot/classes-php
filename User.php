@@ -1,13 +1,13 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "classes");
 class User {
-    public $sid;
+    public $id;
     public $login;
     public $email;
     public $firstname;
     public $lastname;
     public function __construct() {
-        $this->sid = null;
+        $this->id = null;
         $this->login = "";
         $this->email = "";
         $this->firstname = "";
@@ -31,7 +31,7 @@ class User {
         $result = $conn->query($sql);
         if($result->num_rows > 0){
             $data = $result->fetch_assoc();
-            $this->sid = $data['id'];
+            $this->id = $data['id'];
             $this->login = $data['login'];
             $this->email = $data['email'];
             $this->firstname = $data['firstname'];
@@ -50,7 +50,7 @@ class User {
         $this->lastname = "";
     }
     public function delete(){
-    $sql ="DELETE FROM utilisateurs WHERE id = $this->sid";
+    $sql ="DELETE FROM utilisateurs WHERE id = $this->id";
         global $conn;
         if($conn->query($sql)){
             $this->disconnect();
@@ -61,7 +61,7 @@ class User {
         }
     }
     public function update($login, $password,$email, $firstname,$lastname){
-        $sql = "UPDATE utilisateurs SET login = '$login', password = '$password', email = '$email', firstname = '$firstname', lastname = '$lastname' WHERE id = $this->sid";
+        $sql = "UPDATE utilisateurs SET login = '$login', password = '$password', email = '$email', firstname = '$firstname', lastname = '$lastname' WHERE id = $this->id";
         global $conn;
         if($conn->query($sql)){
             $this->login = $login;
@@ -76,15 +76,15 @@ class User {
         }
     }
     public function isconnected(){
-        return $this->sid !== null;
+        return $this->id !== null;
     }
     public function getAllInfos(){
        global $conn;
-       $sql = "SELECT * FROM utilisateurs WHERE id = $this->sid";
+       $sql = "SELECT * FROM utilisateurs WHERE id = $this->id";
        $result = $conn->query($sql);
        if($result->num_rows > 0){
            $data = $result->fetch_assoc();
-           echo $data["logiqn"]."<br>";
+           echo $data["login"]."<br>";
            echo $data["email"]."<br>";
            echo $data["firstname"]."<br>";
            echo $data["lastname"]."<br>";
