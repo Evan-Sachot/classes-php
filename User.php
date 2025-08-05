@@ -1,19 +1,22 @@
 <?php
 $conn = new mysqli("localhost", "root", "", "classes");
-class User {
+class User
+ {
     public $id;
     public $login;
     public $email;
     public $firstname;
     public $lastname;
-    public function __construct() {
+    public function __construct()
+     {
         $this->id = null;
         $this->login = "";
         $this->email = "";
         $this->firstname = "";
         $this->lastname = "";
     }
-    public function register($login, $password,$email, $firstname,$lastname){
+    public function register($login, $password,$email, $firstname,$lastname)
+    {
         global $conn;
         $sql = "INSERT INTO utilisateurs (login, password, email, firstname, lastname) VALUES ('$login', '$password', '$email', '$firstname', '$lastname')";
         if($conn->query($sql)){
@@ -25,7 +28,8 @@ class User {
             return null;
         }
     }
-    public function connect($login, $password){
+    public function connect($login, $password)
+    {
         global $conn;
         $sql = "SELECT * FROM utilisateurs WHERE login = '$login' AND password = '$password'";
         $result = $conn->query($sql);
@@ -42,14 +46,16 @@ class User {
             return false;
         }
     }
-    public function disconnect(){
+    public function disconnect()
+    {
         $this->sid = null;
         $this->login = "";
         $this->email = "";
         $this->firstname = "";
         $this->lastname = "";
     }
-    public function delete(){
+    public function delete()
+    {
     $sql ="DELETE FROM utilisateurs WHERE id = $this->id";
         global $conn;
         if($conn->query($sql)){
@@ -60,7 +66,8 @@ class User {
             return false;
         }
     }
-    public function update($login, $password,$email, $firstname,$lastname){
+    public function update($login, $password,$email, $firstname,$lastname)
+    {
         $sql = "UPDATE utilisateurs SET login = '$login', password = '$password', email = '$email', firstname = '$firstname', lastname = '$lastname' WHERE id = $this->id";
         global $conn;
         if($conn->query($sql)){
