@@ -75,6 +75,47 @@ class Userpdo {
             return false;
         }
         }
+    public function update($login, $password,$email, $firstname,$lastname){
+        global $dbh;
+        $stmt = $dbh->prepare("UPDATE utilisateurs SET login = '$login', password = '$password', email = '$email', firstname = '$firstname', lastname = '$lastname' WHERE id = $this->id");
+        if ($stmt->execute()){
+            $this->login = $login;
+            $this->email = $email;
+            $this->firstname = $firstname;
+            $this->lastname = $lastname;
+            $this->password = $password;
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    public function isconnected(){
+        return $this->id !== null;
+    }
+    public function getAllInfos(){
+        global $dbh;
+        $stmt = $dbh->prepare("SELECT * FROM utilisateurs WHERE id = $this->id");
+        $stmt->execute();
+        if($stmt->rowCount()>0){
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        else{
+            return null;
+        }
+    }
+    public function getlogin(){
+         return $this->login;
+   }
+   public function getemail(){
+    return $this ->email;
+   }
+   public function getFirstname(){
+    return $this->firstname;
+   }
+   public function getLastname(){
+    return $this-> lastname ;
+   }
 }
 
 
