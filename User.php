@@ -2,7 +2,7 @@
 $conn = new mysqli("localhost", "root", "", "classes");
 class User
  {
-    public $id;
+    private $id;
     public $login;
     public $email;
     public $firstname;
@@ -18,7 +18,8 @@ class User
     public function register($login, $password,$email, $firstname,$lastname)
     {
         global $conn;
-        $sql = "INSERT INTO utilisateurs (login, password, email, firstname, lastname) VALUES ('$login', '$password', '$email', '$firstname', '$lastname')";
+        $passwordhash = password_hash($password, PASSWORD_BCRYPT);
+        $sql = "INSERT INTO utilisateurs (login, password, email, firstname, lastname) VALUES ('$login', '$passwordhash', '$email', '$firstname', '$lastname')";
         if($conn->query($sql)){
             $id = $conn -> insert_id;
             $result = $conn->query("SELECT * FROM utilisateurs WHERE id = $id");
@@ -31,17 +32,22 @@ class User
     public function connect($login, $password)
     {
         global $conn;
-        $sql = "SELECT * FROM utilisateurs WHERE login = '$login' AND password = '$password'";
+        $sql = "SELECT * FROM utilisateurs WHERE login= '$login'";
         $result = $conn->query($sql);
         if($result->num_rows > 0){
             $data = $result->fetch_assoc();
+            if(password_verify($password, $data['password'])){
             $this->id = $data['id'];
             $this->login = $data['login'];
             $this->email = $data['email'];
             $this->firstname = $data['firstname'];
             $this->lastname = $data['lastname'];
             return true;
-        }
+            }
+            else{
+                return false;
+            }
+        } 
         else {
             return false;
         }
@@ -75,7 +81,7 @@ class User
             $this->email = $email;
             $this->firstname = $firstname;
             $this->lastname = $lastname;
-            $this->password = $password;
+            $this->password = $password;            
             return true;
         }
         else {
@@ -83,6 +89,11 @@ class User
         }
     }
     public function isconnected(){
+        if($this->id !== null){
+            echo "est connecté";
+        } else {
+            echo "n'est pas connecté";
+        }
         return $this->id !== null;
     }
     public function getAllInfos(){
@@ -112,7 +123,12 @@ class User
    public function getLastname(){
     return $this-> lastname ;
    }
+   public function getId(){
+    return $this->id;
+   }
 }
-
-
+$user = new User();
+$user->register('evan','evan','evan','evan','evan');
+$user->connect('evan','evan');
+$user->isconnected();
 ?>

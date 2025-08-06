@@ -6,7 +6,7 @@ $dbh = new PDO('mysql:host=Localhost;dbname=classes', 'root','');
     exit;
 }
 class Userpdo {
- public $id;
+    private $id;
     public $login;
     public $email;
     public $firstname;
@@ -90,7 +90,12 @@ class Userpdo {
             return false;
         }
     }
-    public function isconnected(){
+     public function isconnected(){
+        if($this->id !== null){
+            echo "est connecté";
+        } else {
+            echo "n'est pas connecté";
+        }
         return $this->id !== null;
     }
     public function getAllInfos(){
